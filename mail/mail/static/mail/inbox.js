@@ -184,7 +184,6 @@ function load_mail(id) {
           </div>              
         </div>
       `;
-
       document.querySelector("#email-view").append(element);
     })
     .catch((error) => console.error("Error:", error));
