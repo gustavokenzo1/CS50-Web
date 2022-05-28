@@ -1,0 +1,21 @@
+{% extends "encyclopedia/layout.html" %}
+
+{% block title %}
+    {{ language }}
+{% endblock %}
+
+{% block body %}
+
+  <h1> {{ language }} </h1>
+  {% if description %}
+  <a href="{% url 'edit' language=language %}"> 
+    Edit page
+  </a>
+  <h1>
+    {{ description|safe }}
+  </h1>
+  {% else %}
+  <h1>Unfortunately, this page does not exist</h1>
+  {% endif %}
+
+{% endblock %}

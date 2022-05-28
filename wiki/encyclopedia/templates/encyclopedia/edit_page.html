@@ -1,0 +1,18 @@
+{% extends "encyclopedia/layout.html" %}
+{% load static %}
+
+{% block title %}
+  Edit {{ language }}
+{% endblock %}
+
+{% block body %}
+
+    <h1> Editing {{ language }} </h1>
+
+    <form method="post">
+      {% csrf_token %}
+      {{ editPageForm }}
+      <input type="submit" value="Save edits" class="btn btn-primary">
+    </form>
+
+{% endblock %}

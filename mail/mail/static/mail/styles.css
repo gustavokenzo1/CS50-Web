@@ -1,0 +1,40 @@
+textarea {
+  min-height: 400px;
+}
+
+.container {
+    padding-bottom: 50px;
+}
+
+.user-email {
+  margin: 50px 0 50px 0;
+}
+
+.email {
+  width: 100%;
+  border: 1px solid #ccc;
+  padding: 20px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  transition: 0.3s;
+  cursor: pointer;
+  border-radius: 5px;
+  margin-top: 40px;
+}
+
+.email-header {
+  padding: 20px 0px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.email-body {
+  padding: 20px;
+  border: 1px solid #ccc;
+}
+
+.archiveButton {
+    margin-top: 10px;
+}

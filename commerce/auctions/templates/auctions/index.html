@@ -1,0 +1,48 @@
+{% extends "auctions/layout.html" %}
+
+{% block body %}
+    <div class="rightSide">
+
+        <h2>Active Listings</h2>
+
+        <form class="categoriesForm" method="post">
+            {% csrf_token %}
+            {{ categories }}
+            <input class="categorySubmit" type="submit" value="Select Category">
+        </form>
+
+        <ul class="listings">
+            {% for auction in auctions %}
+                {% if auction.is_active %}
+                    <a href="{% url 'item' item_id=auction.id %}">
+                        <li class="listingItem">
+                            <div class="mainItemInfo">
+                                <h1> {{ auction.title }} </h1>
+                                <p>
+                                    <strong>Description: </strong> {{ auction.description }} 
+                                </p>
+                                <div> 
+                                    <strong>Current Price: </strong> ${{ auction.current_price }} 
+                                </div>
+                                <div> 
+                                    <strong>Category: </strong> {{ auction.category }} 
+                                </div>
+                                <div> 
+                                    <strong>Starting Bid: </strong> ${{ auction.starting_bid }} 
+                                </div>
+                                <div> 
+                                    <strong>Posted by: </strong> {{ auction.user }}
+                                </div>
+                            </div>
+                            {% if auction.image %}
+                                <img src="{{ auction.image }}" alt="Item for listing" />
+                            {% else %}
+                                <p>No image was provided</p>
+                            {% endif %}
+                        </li>
+                    </a>                
+                {% endif %}
+            {% endfor %}
+        </ul>
+    </div>
+{% endblock %}
