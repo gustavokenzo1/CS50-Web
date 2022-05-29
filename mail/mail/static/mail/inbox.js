@@ -125,10 +125,6 @@ function load_mailbox(mailbox) {
         })
       )
       .catch((error) => console.error("Error:", error));
-
-    if (mailbox === "inbox") {
-      load_mailbox("sent");
-    }
   }
 }
 
@@ -144,7 +140,7 @@ function load_mail(id) {
     }),
   }).catch((error) => console.error("Error:", error));
 
-  document.querySelector("#email-view").value = "";
+  document.querySelector("#email-view").innerHTML = "";
 
   fetch(`/emails/${id}`)
     .then((response) => response.json())
