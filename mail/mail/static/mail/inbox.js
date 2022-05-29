@@ -146,7 +146,6 @@ function load_mail(id) {
     .then((response) => response.json())
     .then((email) => {
       const element = document.createElement("div");
-
       element.innerHTML += `
         <div class="insideEmail">
           <div class="email-header">
@@ -184,36 +183,31 @@ function load_mail(id) {
         </div>
       `;
       element.querySelector(".email-reply").addEventListener("click", () => {
-        reply_email(
-          email.recipients,
-          email.subject,
-          email.body,
-          email.timestamp
-        );
+        reply_email(email.sender, email.subject, email.body, email.timestamp);
       });
       document.querySelector("#email-view").append(element);
     })
     .catch((error) => console.error("Error:", error));
 }
 
-function reply_email(recipient, subject, body, timestamp) {
+function reply_email(sender, subject, body, timestamp) {
   document.querySelector("#emails-view").style.display = "none";
   document.querySelector("#email-view").style.display = "none";
   document.querySelector("#compose-view").style.display = "block";
 
-  document.querySelector("#compose-recipients").value = recipient;
+  document.querySelector("#compose-recipients").value = sender;
   document.querySelector("#compose-subject").value = `${
     subject.startsWith("Re: ") ? subject : "Re: " + subject
   }`;
   document.querySelector(
     "#compose-body"
-  ).value = `On ${timestamp} ${recipient} wrote:
+  ).value = `On ${timestamp} ${sender} wrote:
 
   ${body}`;
 
   document.querySelector("#compose-form").onsubmit = (event) => {
     event.preventDefault();
-    
+
     const recipients = document.querySelector("#compose-recipients").value;
     const subject = document.querySelector("#compose-subject").value;
     const body = document.querySelector("#compose-body").value;
@@ -223,7 +217,7 @@ function reply_email(recipient, subject, body, timestamp) {
       body: JSON.stringify({
         recipients: recipients,
         subject: subject,
-        body: body,
+        body: `${body}`,
       }),
     })
       .then((response) => response.json())

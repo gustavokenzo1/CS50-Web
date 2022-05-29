@@ -33,6 +33,7 @@ textarea {
 .email-body {
   padding: 20px;
   border: 1px solid #ccc;
+  white-space: pre-wrap;
 }
 
 .archiveButton {
