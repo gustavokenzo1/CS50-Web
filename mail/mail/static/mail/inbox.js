@@ -26,7 +26,9 @@ function compose_email() {
   document.querySelector("#compose-subject").value = "";
   document.querySelector("#compose-body").value = "";
 
-  document.querySelector("#compose-form").onsubmit = () => {
+  document.querySelector("#compose-form").onsubmit = (event) => {
+    event.preventDefault();
+
     const recipients = document.querySelector("#compose-recipients").value;
     const subject = document.querySelector("#compose-subject").value;
     const body = document.querySelector("#compose-body").value;
@@ -39,8 +41,7 @@ function compose_email() {
         body: body,
       }),
     })
-      .then((response) => response.json())
-      .then((data) => {
+      .then(() => {
         load_mailbox("sent");
       })
       .catch((error) => console.error("Error:", error));
@@ -210,7 +211,9 @@ function reply_email(recipient, subject, body, timestamp) {
 
   ${body}`;
 
-  document.querySelector("#compose-form").onsubmit = () => {
+  document.querySelector("#compose-form").onsubmit = (event) => {
+    event.preventDefault();
+    
     const recipients = document.querySelector("#compose-recipients").value;
     const subject = document.querySelector("#compose-subject").value;
     const body = document.querySelector("#compose-body").value;
