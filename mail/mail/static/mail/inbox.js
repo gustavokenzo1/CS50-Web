@@ -41,7 +41,6 @@ function compose_email() {
     })
       .then((response) => response.json())
       .then((data) => {
-        console.log(data);
         load_mailbox("sent");
       })
       .catch((error) => console.error("Error:", error));
@@ -177,10 +176,57 @@ function load_mail(id) {
           </div>
           <div class="email-body">
             ${email.body}
-          </div>              
+          </div>      
+          <div class="email-reply">
+            <button class="btn btn-sm btn-outline-primary mt-4">Reply</button>
+          </div>        
         </div>
       `;
+      element.querySelector(".email-reply").addEventListener("click", () => {
+        reply_email(
+          email.recipients,
+          email.subject,
+          email.body,
+          email.timestamp
+        );
+      });
       document.querySelector("#email-view").append(element);
     })
     .catch((error) => console.error("Error:", error));
+}
+
+function reply_email(recipient, subject, body, timestamp) {
+  document.querySelector("#emails-view").style.display = "none";
+  document.querySelector("#email-view").style.display = "none";
+  document.querySelector("#compose-view").style.display = "block";
+
+  document.querySelector("#compose-recipients").value = recipient;
+  document.querySelector("#compose-subject").value = `${
+    subject.startsWith("Re: ") ? subject : "Re: " + subject
+  }`;
+  document.querySelector(
+    "#compose-body"
+  ).value = `On ${timestamp} ${recipient} wrote:
+
+  ${body}`;
+
+  document.querySelector("#compose-form").onsubmit = () => {
+    const recipients = document.querySelector("#compose-recipients").value;
+    const subject = document.querySelector("#compose-subject").value;
+    const body = document.querySelector("#compose-body").value;
+
+    fetch("/emails", {
+      method: "POST",
+      body: JSON.stringify({
+        recipients: recipients,
+        subject: subject,
+        body: body,
+      }),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        load_mailbox("sent");
+      })
+      .catch((error) => console.error("Error:", error));
+  };
 }
