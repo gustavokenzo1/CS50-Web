@@ -27,7 +27,6 @@
   padding: 2rem;
   border: 1px solid #ccc;
   border-radius: 5px;
-  margin-bottom: 2rem;
 }
 
 .postText {
@@ -73,4 +72,15 @@
 
 .profileHistory h3 {
   margin: 2rem 0 2rem;
+}
+
+.step-links {
+  margin-bottom: 2rem;
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  padding: 1rem;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
 }

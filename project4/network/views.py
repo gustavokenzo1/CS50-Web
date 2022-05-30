@@ -6,6 +6,7 @@ from django.shortcuts import render
 from django.urls import reverse
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import csrf_exempt
+from django.core.paginator import Paginator
 
 from .models import User, Post, Like, Follow
 
@@ -15,8 +16,14 @@ def index(request):
     for post in posts:
         post["user"] = User.objects.get(id=post["user_id"])
 
+    paginator = Paginator(posts, 10)
+    page = request.GET.get('page')
+
+    page_obj = paginator.get_page(page)
+
     return render(request, "network/index.html", {
-        "posts": posts
+        "posts": page_obj, 
+        "type": "All Posts"
     })
 
 
@@ -126,5 +133,6 @@ def following(request):
         post["user"] = User.objects.get(id=post["user_id"])
 
     return render(request, "network/index.html", {
-        "posts": posts
+        "posts": posts,
+        "type": "People You Follow"
     })
