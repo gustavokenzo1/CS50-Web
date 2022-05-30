@@ -1,0 +1,71 @@
+.title {
+  margin: 2rem 0 2rem;
+}
+
+.newPostContainer {
+  border: 1px solid #ccc;
+  padding: 2rem;
+  border-radius: 5px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+}
+
+.latestPosts {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  margin: 5rem 0 5rem;
+}
+
+.postContainer {
+  width: 100%;
+  padding: 2rem;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.postText {
+  padding: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  margin-bottom: 1rem;
+}
+
+.postUser {
+  margin-top: 10px;
+  margin-bottom: 5px;
+}
+
+.profile {
+  display: flex;
+  flex-direction: column;
+  padding: 4rem;
+}
+
+.profileInfo {
+  display: flex;
+  flex-direction: column;
+  align-self: center;
+  background-color: #eee;
+  padding: 2rem;
+  border-radius: 10px;
+  align-items: center;
+}
+
+.profileStats {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 1rem;
+  width: 100%;
+}
+
+.profileStat {
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+}
+
+.profileHistory h3 {
+  margin: 2rem 0 2rem;
+}
