@@ -6,13 +6,18 @@ from django.shortcuts import render
 from django.urls import reverse
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import csrf_exempt
-from django.core import serializers
 
 from .models import User, Post, Like, Follow
 
 
 def index(request):
-    return render(request, "network/index.html")
+    posts = Post.objects.all().order_by("-timestamp").values()
+    for post in posts:
+        post["user"] = User.objects.get(id=post["user_id"])
+
+    return render(request, "network/index.html", {
+        "posts": posts
+    })
 
 
 def login_view(request):
@@ -76,24 +81,23 @@ def post(request):
         Post.objects.create(user=request.user, text=text)
 
         return JsonResponse({"message": "Successfully created post!"}, status=201)
-    elif request.method == "GET":
-        posts = list(Post.objects.all().order_by("-timestamp").values())
-        for post in posts:
-            post["user"] = User.objects.filter(id=post["user_id"]).values()[0]
 
-        return JsonResponse(posts, safe=False)
+    return JsonResponse({"message": "Invalid request method."}, status=400)
 
 
 @csrf_exempt
 @login_required
 def profile(request, username):
-    alreadyFollows = Follow.objects.filter(user=request.user, follower=User.objects.get(username=username)).exists()
+    alreadyFollows = Follow.objects.filter(
+        user=request.user, follower=User.objects.get(username=username)).exists()
 
     if request.method == "POST":
         if not alreadyFollows:
-            Follow.objects.create(user=request.user, follower=User.objects.get(username=username))
+            Follow.objects.create(
+                user=request.user, follower=User.objects.get(username=username))
         else:
-            Follow.objects.filter(user=request.user, follower=User.objects.get(username=username)).delete()
+            Follow.objects.filter(
+                user=request.user, follower=User.objects.get(username=username)).delete()
 
     followers = Follow.objects.filter(follower__username=username).count()
     following = Follow.objects.filter(user__username=username).count()
@@ -106,4 +110,21 @@ def profile(request, username):
         "following": following,
         "posts": posts,
         "follows": alreadyFollows
+    })
+
+
+@csrf_exempt
+@login_required
+def following(request):
+    following = Follow.objects.filter(user=request.user).values()
+    posts = []
+    for follow in following:
+        posts.append(Post.objects.filter(user=follow["follower_id"]).order_by(
+            "-timestamp").values()[0])
+
+    for post in posts:
+        post["user"] = User.objects.get(id=post["user_id"])
+
+    return render(request, "network/index.html", {
+        "posts": posts
     })
