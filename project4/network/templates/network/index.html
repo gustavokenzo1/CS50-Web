@@ -3,38 +3,46 @@
 {% block body %}
     <div class="container">
         <h1 class="title">{{ type }}</h1>
-        <div class="newPostContainer">
-            <h2>New Post</h2>
-            <form id="submit-form">
-                <div class="form-group">
-                    <input id="submit-post-text" class="form-control" type="text">
-                </div>
-                <div class="form-group">
-                    <input id="submit-post" class="btn btn-primary" type="submit">
-                </div>
-            </form>
-        </div>
+        {% if not type == "People You Follow" %}
+            <div class="newPostContainer">
+                <h2>New Post</h2>
+                <form id="submit-form">
+                    <div class="form-group">
+                        <input id="submit-post-text" class="form-control" type="text">
+                    </div>
+                    <div class="form-group">
+                        <input id="submit-post" class="btn btn-primary" type="submit">
+                    </div>
+                </form>
+            </div>
+        {% endif %}
         <div class="latestPosts">
             {% for post in posts %}
-            <div class="postContainer">
+            <div id="{{post.id}}" class="postContainer">
                 <div class="postText">
-                  {{post.text}}
+                    <div class="text">
+                        {{post.text}}
+                    </div>
+                    <input class="editForm" style="display: none;">
                 </div>
                 <div class="postInfo">
-                  <div class="postLikes">
-                    <i id="likeIcon" class="fa fa-solid fa-heart-o" style="margin-right: 5px;"></i> 0
-                  </div>
-                  <div class="postUser">
-                    <strong>Posted by:</strong>
-                      <a href="/profile/{{post.user.username}}">
-                        {{post.user.username}}
-                      </a>
-                  </div>
-                  <div class="postTimestamp">
-                    <small>
-                      {{post.timestamp}}
-                    </small>
-                  </div>
+                    {% if user.username == post.user.username %}
+                        <button id="editButton" data-id="{{post.id}}" class="btn btn-primary mb-2">Edit</button>
+                    {% endif %}
+                    <div class="postLikes">
+                        <i id="likeIcon" class="fa fa-solid fa-heart-o" style="margin-right: 5px;"></i> 0
+                    </div>
+                    <div class="postUser">
+                        <strong>Posted by:</strong>
+                        <a href="/profile/{{post.user.username}}">
+                            {{post.user.username}}
+                        </a>
+                    </div>
+                    <div class="postTimestamp">
+                        <small>
+                        {{post.timestamp}}
+                        </small>
+                    </div>
                 </div>
               </div>
             {% endfor %}

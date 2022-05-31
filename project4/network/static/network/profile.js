@@ -4,15 +4,6 @@ document.addEventListener("DOMContentLoaded", () => {
       method: "POST",
     })
       .then(() => {
-        /* if (document.querySelector("#followButton").innerHTML === "Follow") {
-          document.querySelector("#followButton").innerHTML = "Unfollow";
-          document.querySelector("#followers").innerHTML =
-            parseInt(document.querySelector("#followers").innerHTML) + 1;
-        } else {
-          document.querySelector("#followButton").innerHTML = "Follow";
-          document.querySelector("#followers").innerHTML =
-            parseInt(document.querySelector("#followers").innerHTML) - 1;
-        } */
         window.location.reload();
       })
       .catch((error) => {

@@ -132,7 +132,28 @@ def following(request):
     for post in posts:
         post["user"] = User.objects.get(id=post["user_id"])
 
+    paginator = Paginator(posts, 10)
+    page = request.GET.get('page')
+
+    page_obj = paginator.get_page(page)
+
     return render(request, "network/index.html", {
-        "posts": posts,
+        "posts": page_obj,
         "type": "People You Follow"
     })
+
+
+@csrf_exempt
+@login_required
+def edit(request, post_id):
+    if request.method == "PATCH":
+        data = json.loads(request.body)
+        text = data.get("message")
+
+        postOwner = Post.objects.get(id=post_id).user
+
+        if postOwner == request.user:
+            Post.objects.filter(id=post_id).update(text=text)
+            return JsonResponse({"message": "Successfully edited post!"}, status=201)
+        else:
+            return JsonResponse({"message": "You cannot edit this post."}, status=401)
