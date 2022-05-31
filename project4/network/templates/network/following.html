@@ -3,19 +3,6 @@
 {% block body %}
     <div class="container">
         <h1 class="title">{{ type }}</h1>
-        {% if not type == "People You Follow" and user.is_authenticated %}
-            <div class="newPostContainer">
-                <h2>New Post</h2>
-                <form id="submit-form">
-                    <div class="form-group">
-                        <input id="submit-post-text" class="form-control" type="text">
-                    </div>
-                    <div class="form-group">
-                        <input id="submit-post" class="btn btn-primary" type="submit">
-                    </div>
-                </form>
-            </div>
-        {% endif %}
         <div class="latestPosts">
             {% for post in posts %}
             <div id="{{post.id}}" class="postContainer">
@@ -30,7 +17,7 @@
                         <button id="editButton" data-id="{{post.id}}" class="btn btn-primary mb-2">Edit</button>
                     {% endif %}
                     <div class="postLikes">
-                        <i data-id="{{post.id}}" id="likeIcon" class="fa fa-solid fa-heart-o" style="margin-right: 5px;"></i> 
+                        <i data-id="{{post.id}}" id="followingLikeIcon" class="fa fa-solid fa-heart-o" style="margin-right: 5px;"></i> 
                         <div data-id="{{post.id}}" id="likes">
                             {{post.likes}}
                         </div>

@@ -1,19 +1,5 @@
 document.addEventListener("DOMContentLoaded", () => {
-  document.querySelector("#followButton").addEventListener("click", () => {
-    fetch(`/profile/${window.location.href.split("/")[4]}`, {
-      method: "POST",
-    })
-      .then(() => {
-        window.location.reload();
-      })
-      .catch((error) => {
-        console.log("Error:", error);
-      });
-  });
-});
-
-document.addEventListener("DOMContentLoaded", () => {
-  document.querySelectorAll("#profileLikeIcon").forEach((icon) => {
+  document.querySelectorAll("#followingLikeIcon").forEach((icon) => {
     fetch(`/like/${icon.getAttribute("data-id")}`, {
       method: "GET",
     }).then((response) => {

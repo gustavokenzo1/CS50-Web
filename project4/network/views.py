@@ -15,6 +15,8 @@ def index(request):
     posts = Post.objects.all().order_by("-timestamp").values()
     for post in posts:
         post["user"] = User.objects.get(id=post["user_id"])
+        post["likes"] = Like.objects.filter(
+            post=Post.objects.get(id=post["id"])).count()
 
     paginator = Paginator(posts, 10)
     page = request.GET.get('page')
@@ -22,7 +24,7 @@ def index(request):
     page_obj = paginator.get_page(page)
 
     return render(request, "network/index.html", {
-        "posts": page_obj, 
+        "posts": page_obj,
         "type": "All Posts"
     })
 
@@ -93,10 +95,12 @@ def post(request):
 
 
 @csrf_exempt
-@login_required
 def profile(request, username):
-    alreadyFollows = Follow.objects.filter(
-        user=request.user, follower=User.objects.get(username=username)).exists()
+    alreadyFollows = False
+    
+    if request.user is not None and request.user.is_authenticated:
+        alreadyFollows = Follow.objects.filter(
+            user=request.user, follower=User.objects.get(username=username)).exists()
 
     if request.method == "POST":
         if not alreadyFollows:
@@ -111,11 +115,19 @@ def profile(request, username):
     posts = Post.objects.filter(
         user__username=username).order_by("-timestamp").values()
 
+    for post in posts:
+        post["likes"] = Like.objects.filter(
+            post=Post.objects.get(id=post["id"])).count()
+
+    paginator = Paginator(posts, 10)
+    page = request.GET.get('page')
+    page_obj = paginator.get_page(page)
+
     return render(request, "network/profile.html", {
         "username": username,
         "followers": followers,
         "following": following,
-        "posts": posts,
+        "posts": page_obj,
         "follows": alreadyFollows
     })
 
@@ -126,18 +138,22 @@ def following(request):
     following = Follow.objects.filter(user=request.user).values()
     posts = []
     for follow in following:
-        posts.append(Post.objects.filter(user=follow["follower_id"]).order_by(
-            "-timestamp").values()[0])
+        userPosts = Post.objects.filter(user=follow["follower_id"]).order_by(
+            "-timestamp").values()
+        for post in userPosts:
+            posts.append(post)
 
     for post in posts:
         post["user"] = User.objects.get(id=post["user_id"])
+        post["likes"] = Like.objects.filter(
+            post=Post.objects.get(id=post["id"])).count()
 
     paginator = Paginator(posts, 10)
     page = request.GET.get('page')
 
     page_obj = paginator.get_page(page)
 
-    return render(request, "network/index.html", {
+    return render(request, "network/following.html", {
         "posts": page_obj,
         "type": "People You Follow"
     })
@@ -157,3 +173,25 @@ def edit(request, post_id):
             return JsonResponse({"message": "Successfully edited post!"}, status=201)
         else:
             return JsonResponse({"message": "You cannot edit this post."}, status=401)
+
+
+@csrf_exempt
+@login_required
+def like(request, post_id):
+    if request.method == "POST":
+        if not Like.objects.filter(user=request.user, post=Post.objects.get(id=post_id)).exists():
+            Like.objects.create(user=request.user,
+                                post=Post.objects.get(id=post_id))
+            return JsonResponse({"message": "Successfully liked post!"}, status=201)
+        else:
+            Like.objects.filter(user=request.user,
+                                post=Post.objects.get(id=post_id)).delete()
+            return JsonResponse({"message": "Successfully unliked post!"}, status=201)
+
+    elif request.method == "GET":
+        likes = Like.objects.filter(
+            post=Post.objects.get(id=post_id), user=request.user)
+        if likes.exists():
+            return JsonResponse({"message": "liked"}, status=200)
+        else:
+            return JsonResponse({"message": "not liked"}, status=200)

@@ -91,3 +91,15 @@
   justify-content: center;
   gap: 10px;
 }
+
+#likeIcon, #profileLikeIcon, #followingLikeIcon {
+  cursor: pointer;
+}
+
+.postLikes {
+  display: flex;
+  align-items: center;
+  flex-direction: row;
+  gap: 5px;
+  font-size: 18px;
+}
