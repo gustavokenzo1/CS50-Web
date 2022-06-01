@@ -12,15 +12,29 @@
       crossorigin
     ></script>
     <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
-    <link href="{% static 'ride/styles.css' %}" rel="stylesheet">
-    <title>Hello</title>
+    <link href="{% static 'ride/styles.css' %}" rel="stylesheet" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
+    <title>Ride</title>
   </head>
   <body>
-    <div id="app"></div>
-
+    {% block body %} 
+    {% endblock %}
     <script type="text/babel" src="{% static 'ride/App.js' %}"></script>
+    <script type="text/babel" src="{% static 'ride/Register.js' %}"></script>
+    <script type="text/babel" src="{% static 'ride/Login.js' %}"></script>
     <script type="text/babel">
       ReactDOM.render(<App />, document.querySelector("#app"));
+    </script>
+    <script type="text/babel">
+      ReactDOM.render(<Register />, document.querySelector("#register"));
+    </script>
+    <script type="text/babel">
+      ReactDOM.render(<Login />, document.querySelector("#login"));
     </script>
   </body>
 </html>

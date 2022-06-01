@@ -5,4 +5,12 @@ from django.http import HttpResponse
 
 
 def index(request):
-    return render(request, 'ride/layout.html')
+    return render(request, 'ride/index.html')
+
+
+def register(request):
+    return render(request, 'ride/register.html')
+
+
+def login(request):
+    return render(request, 'ride/login.html')
