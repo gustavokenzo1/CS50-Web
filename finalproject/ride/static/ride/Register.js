@@ -17,14 +17,7 @@ function Register() {
           password: password,
           email: email,
         }),
-      })
-      .then(response => response.json())
-      .then(data => {
-        if (data.status === "success") {
-          window.location.href = "/login";
-        }
-      })
-      .catch((error) => {
+      }).catch((error) => {
         alert(error);
       });
     }

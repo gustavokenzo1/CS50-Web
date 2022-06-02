@@ -1,7 +1,9 @@
 import json
 from django.shortcuts import render
 from django.views.decorators.csrf import csrf_exempt
+from django.contrib.auth import authenticate, login, logout
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
+from django.db import IntegrityError
 
 from .models import User
 
@@ -12,32 +14,49 @@ def index(request):
     return render(request, 'ride/index.html')
 
 
-@csrf_exempt
-def register(request):
+def register_view(request):
     if request.method == "POST":
-        data = json.loads(request.body)
-        username = data.get('username')
-        email = data.get('email')
-        password = data.get('password')
+        username = request.POST["username"]
+        email = request.POST["email"]
+        password = request.POST["password"]
+        confirmation = request.POST["confirmation"]
 
-        user = User(username=username, email=email, password=password)
-        user.save()
+        if password != confirmation:
+            return render(request, "ride/register.html", {
+                "message": "Passwords must match."
+            })
 
-        return JsonResponse({'status': 'success'}, status=201)
+        try:
+            user = User.objects.create_user(username, email, password)
+            user.save()
+        except IntegrityError:
+            return render(request, "ride/register.html", {
+                "message": "Username already taken."
+            })
+        return HttpResponseRedirect("/login")
+    else:
+        return render(request, "ride/register.html")
 
-    return render(request, 'ride/register.html')
 
 
-@csrf_exempt
-def login(request):
+def login_view(request):
     if request.method == "POST":
-        data = json.loads(request.body)
-        email = data.get('email')
-        password = data.get('password')
+        username = request.POST["username"]
+        password = request.POST["password"]
+        user = authenticate(username=username, password=password)
 
-        user = User.objects.filter(email=email, password=password)
-        if user:
-            return JsonResponse({'status': 'success'}, status=200)
+        if user is not None:
+            login(request, user)
+            return HttpResponseRedirect("/rides")
+        else:
+            return render(request, "ride/login.html", {
+                "message": "Invalid username and/or password."
+            })
+    else:
+        return render(request, "ride/login.html")
 
-        return JsonResponse({'status': 'fail'}, status=401)
-    return render(request, 'ride/login.html')
+
+def rides(request):
+    if not request.user.is_authenticated:
+        return HttpResponseRedirect('/')
+    return render(request, 'ride/ride.html')

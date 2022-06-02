@@ -22,11 +22,10 @@
     <title>Ride</title>
   </head>
   <body>
-    {% block body %} 
-    {% endblock %}
+    {% block body %} {% endblock %}
     <script type="text/babel" src="{% static 'ride/App.js' %}"></script>
     <script type="text/babel" src="{% static 'ride/Register.js' %}"></script>
-    <script type="text/babel" src="{% static 'ride/Login.js' %}"></script>
+    <script type="text/babel" src="{% static 'ride/Ride.js' %}"></script>
     <script type="text/babel">
       ReactDOM.render(<App />, document.querySelector("#app"));
     </script>
@@ -34,7 +33,7 @@
       ReactDOM.render(<Register />, document.querySelector("#register"));
     </script>
     <script type="text/babel">
-      ReactDOM.render(<Login />, document.querySelector("#login"));
+      ReactDOM.render(<Ride />, document.querySelector("#ride"));
     </script>
   </body>
 </html>
