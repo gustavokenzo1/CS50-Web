@@ -9,6 +9,24 @@ function Register() {
 
     if (password !== confirmPassword) {
       alert("Passwords do not match");
+    } else {
+      fetch("/register", {
+        method: "POST",
+        body: JSON.stringify({
+          username: username,
+          password: password,
+          email: email,
+        }),
+      })
+      .then(response => response.json())
+      .then(data => {
+        if (data.status === "success") {
+          window.location.href = "/login";
+        }
+      })
+      .catch((error) => {
+        alert(error);
+      });
     }
   };
 

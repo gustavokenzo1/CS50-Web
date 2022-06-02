@@ -5,6 +5,24 @@ function Login() {
   const handleSubmit = (event) => {
     event.preventDefault();
 
+    if (email && password) {
+      fetch("/login", {
+        method: "POST",
+        body: JSON.stringify({
+          email: email,
+          password: password,
+        }),
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          if (data.status === "success") {
+            window.location.href = "/";
+          }
+        })
+        .catch((error) => {
+          alert(error);
+        });
+    }
   };
 
   return (
