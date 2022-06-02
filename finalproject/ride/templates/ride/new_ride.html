@@ -1,0 +1,37 @@
+{% extends "ride/layout.html" %} {% block body %}
+<div class="container">
+  <h1 class="title">New Ride</h1>
+  <form action="{% url 'new_ride' %}" method="post">
+    {% csrf_token %}
+    <div class="field">
+      <label>Departure</label>
+      <input autocomplete="off" type="text" name="departure" id="departure" />
+    </div>
+    <div class="field">
+      <label>Destination</label>
+      <input
+        autocomplete="off"
+        type="text"
+        name="destination"
+        id="destination"
+      />
+    </div>
+    <div class="field">
+      <label>Schedule</label>
+      <input autocomplete="off" type="text" name="schedule" id="schedule" />
+    </div>
+    <div class="field">
+      <label>Seats</label>
+      <input autocomplete="off" type="number" name="seats" id="seats" />
+    </div>
+    <div class="field">
+      <label>Price</label>
+      <input autocomplete="off" type="text" name="price" id="price" />
+    </div>
+    <div class="field">
+      <button type="submit">Create new ride</button>
+    </div>
+  </form>
+</div>
+
+{% endblock %}

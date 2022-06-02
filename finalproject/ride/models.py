@@ -7,13 +7,14 @@ class User(AbstractUser):
 
 
 class Ride(models.Model):
-    derparture = models.CharField(max_length=100)
+    departure = models.CharField(max_length=100)
     destination = models.CharField(max_length=100)
     schedule = models.CharField(max_length=100)
     seats = models.IntegerField()
+    price = models.IntegerField(default=0)
     driver = models.ForeignKey(User, on_delete=models.CASCADE)
     passengers = models.ManyToManyField(User, related_name='passengers')
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return f'{self.derparture} to {self.destination}'
+        return f'{self.departure} to {self.destination}'

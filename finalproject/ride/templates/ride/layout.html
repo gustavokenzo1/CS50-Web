@@ -19,18 +19,17 @@
       href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;500&display=swap"
       rel="stylesheet"
     />
+    <meta content="width=device-width, initial-scale=1" name="viewport" />
     <title>Ride</title>
   </head>
   <body>
-    {% block body %} {% endblock %}
+    {% block body %} 
+    {% endblock %}
+
     <script type="text/babel" src="{% static 'ride/App.js' %}"></script>
-    <script type="text/babel" src="{% static 'ride/Register.js' %}"></script>
     <script type="text/babel" src="{% static 'ride/Ride.js' %}"></script>
     <script type="text/babel">
       ReactDOM.render(<App />, document.querySelector("#app"));
-    </script>
-    <script type="text/babel">
-      ReactDOM.render(<Register />, document.querySelector("#register"));
     </script>
     <script type="text/babel">
       ReactDOM.render(<Ride />, document.querySelector("#ride"));

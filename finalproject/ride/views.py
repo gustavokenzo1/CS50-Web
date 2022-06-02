@@ -5,12 +5,15 @@ from django.contrib.auth import authenticate, login, logout
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.db import IntegrityError
 
-from .models import User
+from .models import User, Ride
 
 # Create your views here.
 
 
 def index(request):
+    if request.user.is_authenticated:
+        return HttpResponseRedirect('/rides')
+
     return render(request, 'ride/index.html')
 
 
@@ -35,8 +38,10 @@ def register_view(request):
             })
         return HttpResponseRedirect("/login")
     else:
-        return render(request, "ride/register.html")
+        if request.user.is_authenticated:
+            return HttpResponseRedirect("/rides")
 
+        return render(request, "ride/register.html")
 
 
 def login_view(request):
@@ -53,10 +58,65 @@ def login_view(request):
                 "message": "Invalid username and/or password."
             })
     else:
+        if request.user.is_authenticated:
+            return HttpResponseRedirect("/rides")
+
         return render(request, "ride/login.html")
 
 
 def rides(request):
     if not request.user.is_authenticated:
         return HttpResponseRedirect('/')
+
     return render(request, 'ride/ride.html')
+
+
+def new_ride(request):
+    if not request.user.is_authenticated:
+        return HttpResponseRedirect('/')
+
+    if request.method == "POST":
+        departure = request.POST["departure"]
+        destination = request.POST["destination"]
+        schedule = request.POST["schedule"]
+        seats = request.POST["seats"]
+        price = request.POST["price"]
+
+        user = request.user
+
+        ride = Ride.objects.create(
+            departure=departure,
+            destination=destination,
+            schedule=schedule,
+            seats=seats,
+            price=price,
+            driver=user
+        )
+
+        ride.save()
+
+        return HttpResponseRedirect("/rides")
+
+    return render(request, 'ride/new_ride.html')
+
+
+def get_rides(request):
+    if not request.user.is_authenticated:
+        return HttpResponseRedirect('/')
+
+    rides = Ride.objects.all()
+    rides_list = []
+
+    for ride in rides:
+        rides_list.append({
+            "id": ride.id,
+            "departure": ride.departure,
+            "destination": ride.destination,
+            "schedule": ride.schedule,
+            "seats": ride.seats,
+            "price": ride.price,
+            "driver": ride.driver.username,
+            "passengers": [passenger.username for passenger in ride.passengers.all()]
+        })
+
+    return JsonResponse(rides_list, safe=False)
