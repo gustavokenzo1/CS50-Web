@@ -120,3 +120,39 @@ def get_rides(request):
         })
 
     return JsonResponse(rides_list, safe=False)
+
+
+def personal_rides(request):
+    if not request.user.is_authenticated:
+        return HttpResponseRedirect('/')
+
+    rides = Ride.objects.filter(driver=request.user)
+    rides_list = []
+
+    for ride in rides:
+        rides_list.append({
+            "id": ride.id,
+            "departure": ride.departure,
+            "destination": ride.destination,
+            "schedule": ride.schedule,
+            "seats": ride.seats,
+            "price": ride.price,
+            "driver": ride.driver.username,
+            "passengers": [passenger.username for passenger in ride.passengers.all()]
+        })
+
+    return render(request, 'ride/personal_rides.html', {
+        "rides": rides_list
+    })
+
+
+def delete_ride(request, ride_id):
+    if not request.user.is_authenticated:
+        return HttpResponseRedirect('/')
+
+    ride = Ride.objects.get(id=ride_id)
+    if ride.driver != request.user:
+        return HttpResponseRedirect('/rides')
+    ride.delete()
+
+    return HttpResponseRedirect("/rides/personal")

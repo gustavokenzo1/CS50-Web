@@ -13,6 +13,9 @@ function Ride() {
       <a style={{ marginTop: "2rem" }} href="/rides/new">
         <button>Offer a Ride</button>
       </a>
+      <a style={{ marginTop: "2rem" }} href="/rides/personal">
+        <button>My Rides</button>
+      </a>
       <div className="rides">
         <h2>Available Rides</h2>
         <ul>

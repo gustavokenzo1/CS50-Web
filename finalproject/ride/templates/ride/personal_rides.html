@@ -1,0 +1,48 @@
+{% extends "ride/layout.html" %} 
+
+{% block body %}
+
+<div class="container">
+  <div class="rides">
+    <h2>My Rides</h2>
+    <a href="/rides">
+      <button style="margin-bottom: 2rem;">Return</button>
+    </a>
+    <h2>Below, is a list of all the rides you are offering:</h2>
+    <ul>
+      {% for ride in rides %}
+      <li>
+        <div class="item">
+          <div>Departure:</div>
+          {{ride.departure}}
+        </div>
+        <div class="item">
+          <div>Destination:</div>
+          {{ride.destination}}
+        </div>
+        <div class="item">
+          <div>Schedule:</div>
+          {{ride.schedule}}
+        </div>
+        <div class="item">
+          <div>Seats:</div>
+          {{ride.seats}}
+        </div>
+        <div class="item">
+          <div>Price:</div>
+          {{ride.price}}
+        </div>
+        <div class="item">
+          <div>Driver:</div>
+          {{ride.driver}}
+        </div>
+        <button onclick="window.location.href='/ride/delete/{{ride.id}}'">
+          Delete
+        </button>
+      </li>
+      {% endfor %}
+    </ul>
+  </div>
+</div>
+
+{% endblock %}
