@@ -48,23 +48,34 @@
   </div>
 
   <h2 style="margin-bottom: 2rem; margin-top: 2rem">Messages</h2>
+  <h2 style="margin-bottom: 2rem; margin-top: 2rem">Below, is a chat of everyone who is interested</h2>
   <div class="messages">
-    <div>
-      {% if messages %} {% for message in messages %}
-      <div class="message">
-        <div class="messageText">{{message.text}}</div>
-      </div>
-      {% endfor %} {% else %}
+    <div class="allMessages">
+      {% if messages %} 
+        {% for message in messages %}
+          {% if message.sender == request.user %}
+            <div class="message-right">
+              <small>{{ message.sender }}</small>
+              <div class="messageText-right">{{message.message}}</div>
+            </div>
+          {% else %}
+            <div class="message-left">
+              <small>{{ message.sender }}</small>
+              <div class="messageText-left">{{message.message}}</div>
+            </div>
+          {% endif %}
+        {% endfor %} 
+      {% else %}
       <p style="margin-top: 2rem">No messages yet</p>
       {% endif %}
     </div>
-    <form class="messageForm" action="">
+    <form class="messageForm" action="{% url 'message_ride' ride_id=ride.id %}" method="post">
       {% csrf_token %}
       <input
         autocomplete="off"
         class="messageInput"
         type="text"
-        name="text"
+        name="messageText"
         placeholder="Message"
       />
       <button class="messageButton" type="submit">Send</button>

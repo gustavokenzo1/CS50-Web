@@ -11,7 +11,9 @@
     <h2>Below, is a list of all the rides you are offering:</h2>
     <ul>
       {% for ride in rides %}
-      <li>
+      <li
+        onclick="window.location.href='/ride/{{ride.id}}'"
+      >
         <div class="item">
           <div>Departure:</div>
           {{ride.departure}}
@@ -36,10 +38,10 @@
           <div>Driver:</div>
           {{ride.driver}}
         </div>
-        <button onclick="window.location.href='/ride/delete/{{ride.id}}'">
-          Delete
-        </button>
       </li>
+      <button style="margin-bottom: 2rem;" onclick="window.location.href='/ride/delete/{{ride.id}}'">
+        Delete
+      </button>
       {% endfor %}
     </ul>
   </div>

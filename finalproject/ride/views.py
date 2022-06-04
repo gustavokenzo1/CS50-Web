@@ -173,3 +173,21 @@ def ride_details(request, ride_id):
         "passengers": passengers,
         "messages": messages
     })
+
+
+def message_ride(request, ride_id):
+    if request.method == "POST":
+        message = request.POST["messageText"]
+        ride = Ride.objects.get(id=ride_id)
+        user = request.user
+
+        message = Message.objects.create(
+            message=message,
+            ride=ride,
+            sender=user,
+            receiver=ride.driver
+        )
+
+        message.save()
+
+        return HttpResponseRedirect(f"/ride/{ride_id}")

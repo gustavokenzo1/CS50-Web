@@ -142,6 +142,7 @@ li:hover {
   align-items: center;
   justify-content: center;
   gap: 1rem;
+  margin: 1rem;
 }
 
 .detailsTitle {
@@ -163,6 +164,14 @@ li:hover {
   flex-direction: column;
   align-items: center;
   justify-content: space-between;
+  overflow-y: scroll;
+}
+
+.allMessages {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .messageForm {
@@ -175,6 +184,43 @@ li:hover {
 
 .messageInput {
   margin-right: 1rem;
+}
+
+.message-right {
+  width: 40%;
+  padding: 1rem;
+  background: rgb(119, 193, 253);
+  border-radius: 16px;
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
+  margin-bottom: 1rem;
+  align-self: flex-end;
+}
+
+.message-right small {
+  color: #fff;
+}
+
+.message-left {
+  width: 40%;
+  padding: 1rem;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 16px;
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
+  margin-bottom: 1rem;
+  align-self: flex-start;
+}
+
+.messageText-right {
+  color: #fff;
+  margin-top: 1rem;
+}
+
+.messageText-left {
+  margin-top: 1rem;
 }
 
 @media only screen and (max-width: 768px) {
