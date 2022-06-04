@@ -5,7 +5,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.db import IntegrityError
 
-from .models import User, Ride
+from .models import User, Ride, Message
 
 # Create your views here.
 
@@ -116,7 +116,8 @@ def get_rides(request):
             "seats": ride.seats,
             "price": ride.price,
             "driver": ride.driver.username,
-            "passengers": [passenger.username for passenger in ride.passengers.all()]
+            "passengers": [passenger.username for passenger in ride.passengers.all()],
+            "available": True if ride.driver != request.user else False
         })
 
     return JsonResponse(rides_list, safe=False)
@@ -156,3 +157,19 @@ def delete_ride(request, ride_id):
     ride.delete()
 
     return HttpResponseRedirect("/rides/personal")
+
+
+def ride_details(request, ride_id):
+    if not request.user.is_authenticated:
+        return HttpResponseRedirect('/')
+
+    ride = Ride.objects.get(id=ride_id)
+    passengers = [passenger.username for passenger in ride.passengers.all()]
+
+    messages = Message.objects.filter(ride=ride)
+
+    return render(request, 'ride/ride_details.html', {
+        "ride": ride,
+        "passengers": passengers,
+        "messages": messages
+    })

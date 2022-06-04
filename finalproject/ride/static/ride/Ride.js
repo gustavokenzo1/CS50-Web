@@ -40,6 +40,13 @@ function Ride() {
                 <div className="item">
                   <div>Driver:</div> {ride.driver}
                 </div>
+                {ride.available && (
+                  <div className="item">
+                    <a href={`/ride/${ride.id}`}>
+                      <button>Message</button>
+                    </a>
+                  </div>
+                )}
               </li>
             );
           })}

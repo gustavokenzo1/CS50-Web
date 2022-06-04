@@ -10,4 +10,5 @@ urlpatterns = [
     path("get_rides", views.get_rides, name="get_rides"),
     path("rides/personal", views.personal_rides, name="personal_rides"),
     path('ride/delete/<int:ride_id>', views.delete_ride, name='delete_ride'),
+    path('ride/<int:ride_id>', views.ride_details, name='ride_details'),
 ]

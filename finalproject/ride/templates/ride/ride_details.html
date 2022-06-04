@@ -1,0 +1,75 @@
+{% extends "ride/layout.html" %} 
+
+{% block body %}
+
+<div class="container">
+  <h2 style="margin-top: 2rem">Ride Details</h2>
+  <a href="/rides">
+    <button style="margin-bottom: 2rem; margin-top: 2rem">Return</button>
+  </a>
+
+  <div class="details">
+    <div class="detailsItem">
+      <div class="detailsTitle">Departure:</div>
+      {{ride.departure}}
+    </div>
+    <div class="detailsItem">
+      <div class="detailsTitle">Destination:</div>
+      {{ride.destination}}
+    </div>
+    <div class="detailsItem">
+      <div class="detailsTitle">Schedule:</div>
+      {{ride.schedule}}
+    </div>
+    <div class="detailsItem">
+      <div class="detailsTitle">Seats:</div>
+      {{ride.seats}}
+    </div>
+    <div class="detailsItem">
+      <div class="detailsTitle">Price:</div>
+      {{ride.price}}
+    </div>
+    <div class="detailsItem">
+      <div class="detailsTitle">Driver:</div>
+      {{ride.driver}}
+    </div>
+    <div class="detailsItem">
+      <div class="detailsTitle">Passengers:</div>
+      {% if passengers %}
+      <ul>
+        {% for passenger in passangers %}
+        <li>{{passenger}}</li>
+        {% endfor %}
+      </ul>
+      {% else %}
+      <p>No passengers yet</p>
+      {% endif %}
+    </div>
+  </div>
+
+  <h2 style="margin-bottom: 2rem; margin-top: 2rem">Messages</h2>
+  <div class="messages">
+    <div>
+      {% if messages %} {% for message in messages %}
+      <div class="message">
+        <div class="messageText">{{message.text}}</div>
+      </div>
+      {% endfor %} {% else %}
+      <p style="margin-top: 2rem">No messages yet</p>
+      {% endif %}
+    </div>
+    <form class="messageForm" action="">
+      {% csrf_token %}
+      <input
+        autocomplete="off"
+        class="messageInput"
+        type="text"
+        name="text"
+        placeholder="Message"
+      />
+      <button class="messageButton" type="submit">Send</button>
+    </form>
+  </div>
+</div>
+
+{% endblock %}
