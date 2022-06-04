@@ -12,4 +12,6 @@ urlpatterns = [
     path('ride/delete/<int:ride_id>', views.delete_ride, name='delete_ride'),
     path('ride/<int:ride_id>', views.ride_details, name='ride_details'),
     path('ride/<int:ride_id>/message', views.message_ride, name='message_ride'),
+    path('ride/<int:ride_id>/interested', views.interested, name='interested'),
+    path('ride/<int:ride_id>/confirm/<int:user_id>', views.confirm_passenger, name='confirm_passenger'),
 ]

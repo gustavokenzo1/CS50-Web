@@ -223,6 +223,27 @@ li:hover {
   margin-top: 1rem;
 }
 
+.interested {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 2rem;
+}
+
+.interestedPerson {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 2rem;
+  gap: 1rem;
+}
+
+.interestedPerson li {
+  margin: 0;
+}
+
 @media only screen and (max-width: 768px) {
   form {
     width: 100%;

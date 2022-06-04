@@ -13,6 +13,7 @@ class Ride(models.Model):
     seats = models.IntegerField()
     price = models.IntegerField(default=0)
     driver = models.ForeignKey(User, on_delete=models.CASCADE)
+    interested = models.ManyToManyField(User, related_name='interested')
     passengers = models.ManyToManyField(User, related_name='passengers')
     created_at = models.DateTimeField(auto_now_add=True)
 

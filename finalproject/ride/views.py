@@ -1,5 +1,5 @@
 import json
-from django.shortcuts import render
+from django.shortcuts import redirect, render
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth import authenticate, login, logout
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
@@ -167,11 +167,15 @@ def ride_details(request, ride_id):
     passengers = [passenger.username for passenger in ride.passengers.all()]
 
     messages = Message.objects.filter(ride=ride)
+    interested = ride.interested.all()
+    confirmed = ride.passengers.all()
 
     return render(request, 'ride/ride_details.html', {
         "ride": ride,
         "passengers": passengers,
-        "messages": messages
+        "messages": messages,
+        "interested": interested,
+        "confirmed": confirmed
     })
 
 
@@ -191,3 +195,36 @@ def message_ride(request, ride_id):
         message.save()
 
         return HttpResponseRedirect(f"/ride/{ride_id}")
+
+
+def interested(request, ride_id):
+    if not request.user.is_authenticated:
+        return HttpResponseRedirect('/')
+
+    ride = Ride.objects.get(id=ride_id)
+    user = request.user
+
+    if not user in ride.interested.all():
+        ride.interested.add(user)
+
+    else:
+        ride.interested.remove(user)
+    ride.save()
+
+    return redirect(f"/ride/{ride_id}")
+
+
+def confirm_passenger(request, ride_id, user_id):
+    if not request.user.is_authenticated:
+        return HttpResponseRedirect('/')
+
+    ride = Ride.objects.get(id=ride_id)
+    user = User.objects.get(id=user_id)
+
+    if request.user == ride.driver and user in ride.interested.all():
+        ride.passengers.add(user)
+        ride.interested.remove(user)
+        ride.seats -= 1
+        ride.save()
+
+    return redirect(f"/ride/{ride_id}")

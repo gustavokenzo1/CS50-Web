@@ -48,19 +48,19 @@
   </div>
 
   <h2 style="margin-bottom: 2rem; margin-top: 2rem">Messages</h2>
-  <h2 style="margin-bottom: 2rem; margin-top: 2rem">Below, is a chat of everyone who is interested</h2>
+  <h2 style="margin-bottom: 2rem; margin-top: 2rem">Below, is a chat with everyone who is interested</h2>
   <div class="messages">
     <div class="allMessages">
       {% if messages %} 
         {% for message in messages %}
           {% if message.sender == request.user %}
             <div class="message-right">
-              <small>{{ message.sender }}</small>
+              <small>{{ message.sender }} - {{ message.created_at }} </small>
               <div class="messageText-right">{{message.message}}</div>
             </div>
           {% else %}
             <div class="message-left">
-              <small>{{ message.sender }}</small>
+              <small>{{ message.sender }} - {{ message.created_at }} </small>
               <div class="messageText-left">{{message.message}}</div>
             </div>
           {% endif %}
@@ -80,6 +80,44 @@
       />
       <button class="messageButton" type="submit">Send</button>
     </form>
+  </div>
+  <div class="interested">
+    <h2>Interested People</h2>
+    {% if not request.user in interested and request.user != ride.driver and request.user not in confirmed %}
+      <a href="/ride/{{ride.id}}/interested">
+        <button style="margin: 2rem;" class="interestedButton">Reserve my seat</button>
+      </a>
+      <small>
+        Please note that you will only reserve your seat if the driver accepts your request.
+      </small>
+    {% elif not request.user in interested and request.user == ride.driver %}
+      <ul style="margin-top: 2rem;">
+        {% for passenger in interested %}
+        <div class="interestedPerson">
+          <li>{{passenger}}</li>
+          <a href="/ride/{{ride.id}}/confirm/{{passenger.id}}">
+            <button class="interestedButton">Confirm</button>
+          </a>
+        </div>
+        {% endfor %}
+      </ul>
+    {% elif request.user in interested %}
+      <a href="/ride/{{ride.id}}/interested">
+        <button style="margin: 2rem;" class="interestedButton">Cancel my seat</button>
+      </a>
+    {% endif %}
+  </div>
+  <div class="confirmed">
+    <h2>Confirmed People</h2>
+    {% if confirmed %}
+      <ul style="margin-top: 2rem;">
+        {% for passenger in confirmed %}
+        <li>{{passenger}}</li>
+        {% endfor %}
+      </ul>
+    {% else %}
+      <p style="margin: 2rem">No confirmed people yet</p>
+    {% endif %}
   </div>
 </div>
 
