@@ -83,7 +83,7 @@ input {
 }
 
 .rides {
-  margin-top: 4rem;
+  margin: 4rem 2rem;
 }
 
 .rides h2 {
@@ -118,6 +118,7 @@ li:hover {
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
+  gap: 20px;
 }
 
 .details {
@@ -130,6 +131,7 @@ li:hover {
   padding: 1rem;
   display: flex;
   justify-content: space-around;
+  margin: 2rem;
 }
 
 .details ul {
@@ -244,6 +246,12 @@ li:hover {
   margin: 0;
 }
 
+@media only screen and (max-width: 820px) {
+  .details {
+    flex-direction: column;
+  }
+}
+
 @media only screen and (max-width: 768px) {
   form {
     width: 100%;
@@ -259,5 +267,13 @@ li:hover {
 
   ul {
     width: 100%;
+  }
+
+  .message-right {
+    width: 80%;
+  }
+
+  .message-left {
+    width: 80%;
   }
 }
