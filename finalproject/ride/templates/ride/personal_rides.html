@@ -8,42 +8,90 @@
     <a href="/rides">
       <button style="margin-bottom: 2rem;">Return</button>
     </a>
-    <h2>Below, is a list of all the rides you are offering:</h2>
-    <ul>
-      {% for ride in rides %}
-      <li
-        onclick="window.location.href='/ride/{{ride.id}}'"
-      >
-        <div class="item">
-          <div>Departure:</div>
-          {{ride.departure}}
-        </div>
-        <div class="item">
-          <div>Destination:</div>
-          {{ride.destination}}
-        </div>
-        <div class="item">
-          <div>Schedule:</div>
-          {{ride.schedule}}
-        </div>
-        <div class="item">
-          <div>Seats:</div>
-          {{ride.seats}}
-        </div>
-        <div class="item">
-          <div>Price:</div>
-          {{ride.price}}
-        </div>
-        <div class="item">
-          <div>Driver:</div>
-          {{ride.driver}}
-        </div>
-      </li>
-      <button style="margin-bottom: 2rem;" onclick="window.location.href='/ride/delete/{{ride.id}}'">
-        Delete
-      </button>
-      {% endfor %}
-    </ul>
+    <div>
+      <h2>Below, is a list of all the rides you are offering:</h2>
+      <ul>
+        {% if rides %}
+          {% for ride in rides %}
+            <li
+              onclick="window.location.href='/ride/{{ride.id}}'"
+            >
+              <div class="item">
+                <div>Departure:</div>
+                {{ride.departure}}
+              </div>
+              <div class="item">
+                <div>Destination:</div>
+                {{ride.destination}}
+              </div>
+              <div class="item">
+                <div>Schedule:</div>
+                {{ride.schedule}}
+              </div>
+              <div class="item">
+                <div>Seats:</div>
+                {{ride.seats}}
+              </div>
+              <div class="item">
+                <div>Price:</div>
+                {{ride.price}}
+              </div>
+              <div class="item">
+                <div>Driver:</div>
+                {{ride.driver}}
+              </div>
+            </li>
+            <button style="margin-bottom: 2rem;" onclick="window.location.href='/ride/delete/{{ride.id}}'">
+              Delete
+            </button>
+          {% endfor %}
+        {% else %}
+          <li>No rides to display</li>
+        {% endif %}
+      </ul>
+    </div>
+    <div>
+      <h2>Below, is a list of rides you are currently in:</h2>
+      <ul>
+        {% if accepted %}
+          {% for ride in accepted %}
+            <li
+              onclick="window.location.href='/ride/{{ride.id}}'"
+            >
+              <div class="item">
+                <div>Departure:</div>
+                {{ride.departure}}
+              </div>
+              <div class="item">
+                <div>Destination:</div>
+                {{ride.destination}}
+              </div>
+              <div class="item">
+                <div>Schedule:</div>
+                {{ride.schedule}}
+              </div>
+              <div class="item">
+                <div>Seats:</div>
+                {{ride.seats}}
+              </div>
+              <div class="item">
+                <div>Price:</div>
+                {{ride.price}}
+              </div>
+              <div class="item">
+                <div>Driver:</div>
+                {{ride.driver}}
+              </div>
+            </li>
+            <button style="margin-bottom: 2rem;" onclick="window.location.href='/ride/{{ride.id}}'">
+              Details
+            </button>
+          {% endfor %}
+        {% else %}
+          <li>No rides to display</li>
+        {% endif %}
+      </ul>
+    </div>
   </div>
 </div>
 

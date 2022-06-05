@@ -142,8 +142,24 @@ def personal_rides(request):
             "passengers": [passenger.username for passenger in ride.passengers.all()]
         })
 
+    accepted = Ride.objects.filter(passengers=request.user)
+    accepted_list = []
+
+    for ride in accepted:
+        accepted_list.append({
+            "id": ride.id,
+            "departure": ride.departure,
+            "destination": ride.destination,
+            "schedule": ride.schedule,
+            "seats": ride.seats,
+            "price": ride.price,
+            "driver": ride.driver.username,
+            "passengers": [passenger.username for passenger in ride.passengers.all()]
+        })
+
     return render(request, 'ride/personal_rides.html', {
-        "rides": rides_list
+        "rides": rides_list,
+        "accepted": accepted_list
     })
 
 
@@ -179,9 +195,11 @@ def ride_details(request, ride_id):
     })
 
 
+@csrf_exempt
 def message_ride(request, ride_id):
     if request.method == "POST":
-        message = request.POST["messageText"]
+        data = json.loads(request.body)
+        message = data["message"]
         ride = Ride.objects.get(id=ride_id)
         user = request.user
 
@@ -225,6 +243,16 @@ def confirm_passenger(request, ride_id, user_id):
         ride.passengers.add(user)
         ride.interested.remove(user)
         ride.seats -= 1
+        ride.save()
+
+    elif request.user == ride.driver and user in ride.passengers.all():
+        ride.passengers.remove(user)
+        ride.seats += 1
+        ride.save()
+
+    elif request.user == user:
+        ride.passengers.remove(user)
+        ride.seats += 1
         ride.save()
 
     return redirect(f"/ride/{ride_id}")

@@ -2,6 +2,43 @@
 
 {% block body %}
 
+<script>
+  const user = "{{ request.user.username }}";
+  const ride = "{{ ride.id }}";
+
+  document.addEventListener("DOMContentLoaded", () => {
+    const messages = document.querySelector(".messages");
+    messages.scrollTop = messages.scrollHeight;
+
+    document.querySelector(".messageForm").addEventListener("submit", (event) => {
+      event.preventDefault();
+      fetch(`${ride}/message`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          message: document.querySelector(".messageInput").value,
+          user: user
+        })
+      })
+
+        document.querySelector(".allMessages").innerHTML += `
+            <div class="message-right">
+              <small> ${user} - Just Now </small>
+              <div class="messageText-right">${document.querySelector(".messageInput").value}</div>
+            </div>
+          `;
+      
+        document.querySelector(".messageInput").value = "";
+        const messages = document.querySelector(".messages");
+        messages.scrollTop = messages.scrollHeight;
+      });
+  })
+
+
+</script>
+
 <div class="container">
   <h2 style="margin-top: 2rem">Ride Details</h2>
   <a href="/rides">
@@ -33,18 +70,6 @@
       <div class="detailsTitle">Driver:</div>
       {{ride.driver}}
     </div>
-    <div class="detailsItem">
-      <div class="detailsTitle">Passengers:</div>
-      {% if passengers %}
-      <ul>
-        {% for passenger in passangers %}
-        <li>{{passenger}}</li>
-        {% endfor %}
-      </ul>
-      {% else %}
-      <p>No passengers yet</p>
-      {% endif %}
-    </div>
   </div>
 
   <h2 style="margin-bottom: 2rem; margin-top: 2rem">Messages</h2>
@@ -69,7 +94,7 @@
       <p style="margin-top: 2rem">No messages yet</p>
       {% endif %}
     </div>
-    <form class="messageForm" action="{% url 'message_ride' ride_id=ride.id %}" method="post">
+    <form class="messageForm">
       {% csrf_token %}
       <input
         autocomplete="off"
@@ -110,9 +135,14 @@
   <div class="confirmed">
     <h2>Confirmed People</h2>
     {% if confirmed %}
-      <ul style="margin-top: 2rem;">
+      <ul style="margin: 2rem;">
         {% for passenger in confirmed %}
         <li>{{passenger}}</li>
+          {% if passenger == request.user %}
+            <a href="/ride/{{ride.id}}/confirm/{{passenger.id}}">
+              <button class="interestedButton">Cancel my seat</button>
+            </a>
+          {% endif %}
         {% endfor %}
       </ul>
     {% else %}

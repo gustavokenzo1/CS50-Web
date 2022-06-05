@@ -40,11 +40,15 @@ function Ride() {
                 <div className="item">
                   <div>Driver:</div> {ride.driver}
                 </div>
-                {ride.available && (
+                {ride.available ? (
                   <div className="item">
                     <a href={`/ride/${ride.id}`}>
                       <button>Message</button>
                     </a>
+                  </div>
+                ) : (
+                  <div className="item">
+                    <p style={{ color: "green" }}>This is your ride</p>
                   </div>
                 )}
               </li>
